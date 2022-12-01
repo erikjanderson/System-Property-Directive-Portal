@@ -1,7 +1,10 @@
 
+
 # System Property Directive Portal
 
 A scoped application which primarily contains a angular directive that creates an input that automatically detects the type of the system property that you specify. This application also contains examples of using the directive with a full system properties service portal page and widget including custom CSS.
+
+I primarily built this with the use case of wanting to replicate the default UI page that is generated when using the System Property Categories with a Service Portal widget that would give me more opportunity to make a form that wasn't a complete disaster to look at.  The primary that that I had to create to make this as easy and reusable as possible was to create an angular directive to dynamically generate the correct input type based on the type of system property I was specifying.
 
 ![](Docs/SPDirectiveUIPageExample.png)
 

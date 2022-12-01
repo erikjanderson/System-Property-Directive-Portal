@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sp_angular_provider">
+    <sp_angular_provider action="INSERT_OR_UPDATE">
+        <name>itsSystemProperty</name>
+        <script><![CDATA[function itsSystemProperty($http, $compile) {
+    return {
+        replace: true,
+        restrict: 'E',
+        scope: {
+            propertyName: "@",
+            propertyValue: "=?value",
+            propertyDescription: "=?description",
+			propertyLoaded: "=?loaded",
+			inputDisabled: "=?",
+			valueChange: "=?",
+            typeOverride: "@?",
+            placeholder: "@?",
+            grTable: "@?",
+            grDisplayField: "@?",
+            grValueField: "@?",
+            grSearchFields: "@?",
+			ngClass:"=?"
+        },
+        link: function (scope, element, attrs) {
+            scope.inputProperties = {};
+			
+            function getPropertyDetails(propertyName) {
+				
+                var req = {
+                    method: "GET",
+                    url: '/api/now/table/sys_properties',
+                    params: {
+                        "name": propertyName
+                    },
+                    headers: {
+                        "accept": "application/json"
+                    }
+                };
+				
+                $http(req).then(success, error);
+                function success(response) {
+                    if (response && response.data && response.data.result && response.data.result.length) {
+                        var propertyModel = response.data.result[0];
+                        if (scope.propertyValue && scope.propertyValue.$$hashKey) {
+                            scope.propertyValue = '';
+                        }
+                        if (!scope.propertyValue) {
+                            scope.propertyValue = propertyModel.value;
+                        }
+                        if (!scope.propertyDescription) {
+                            scope.propertyDescription = propertyModel.description;
+                        }
+                        if (propertyModel.type) {
+                            if (scope.typeOverride) {
+                                propertyModel.type = scope.typeOverride;
+                            }
+                            var typeObj = determinInputType(propertyModel.type);
+                            if (typeObj.isSimple) {
+								scope.propertyValue = cleanSimpleInputValue(scope.propertyValue, typeObj.type);
+                                scope.inputProperties.element = "input";
+                                scope.inputProperties.type = typeObj.type;
+                            } else {
+                                if (typeObj.type === 'boolean') {
+                                    scope.propertyValue = scope.propertyValue == "true";
+                                    scope.inputProperties.choiceArray = [{n: 'False',v: false}, {n: 'True',v: true}];
+                                    scope.inputProperties.element = "select";
+                                }
+                                if (typeObj.type === 'choice') {
+                                    scope.propertyValue = propertyModel.value;
+                                    scope.inputProperties.element = "select";
+                                    scope.inputProperties.choiceArray = parseChoiceList(propertyModel.choices);
+                                }
+                                if (typeObj.type === 'gliderecord') {
+                                    if (propertyModel.value) {
+                                        scope.propertyValue = JSON.parse(propertyModel.value);
+                                    }
+                                    scope.inputProperties.element = "gliderecord";
+                                    //scope.inputProperties.element = "gliderecord"
+                                }
+                            }
+                            if(scope.inputProperties.element){
+                                var el = $compile(getTemplate(scope.inputProperties.element))(scope);
+								console.log(attrs);
+								for(var name in attrs){
+									if(name.indexOf("$") != 0){
+										if(attrs.$attr[name]){
+											el[0].setAttribute(attrs.$attr[name], attrs[name]);
+										}
+										
+									}
+								}
+                                element.replaceWith(el);
+                            }
+                        }
+                    }
+					scope.propertyLoaded = true;
+                }
+
+                function error(err) {
+                    console.log(err);
+                }
+				
+            }
+			
+			function cleanSimpleInputValue(propertyValue, propertyType){
+				if(propertyType == 'date' || propertyType == 'time'){
+					propertyValue = new Date(propertyValue);
+				}else if(propertyType == 'number'){
+					propertyValue = parseInt(propertyValue);
+				}
+				
+				return propertyValue;
+			}
+
+            function parseChoiceList(choiceString) {
+                //console.log(choiceString)
+                var returnArray = [];
+                if (choiceString) {
+                    var array = choiceString.split(',');
+                    if (array && array.length > 0) {
+                        for (var i = 0; i < array.length; i++) {
+                            var choice = array[i];
+                            if (choice.indexOf('=') > -1) {
+                                var options = choice.split('=');
+                                if (options[0] && options[1]) {
+                                    returnArray.push({
+                                        n: options[0],
+                                        v: options[1]
+                                    });
+                                }
+                            } else {
+                                returnArray.push({
+                                    n: choice,
+                                    v: choice
+                                });
+                            }
+                        }
+                    }
+                }
+                return returnArray;
+            }
+
+            function determinInputType(propertyType) {
+                var propertyTypeModel = {
+                    "color": "color",
+                    "date_format": "date",
+                    "integer": "number",
+                    "password": "password",
+                    "password2": "password",
+                    "short_string": "text",
+                    "string": "text",
+                    "time_format": "time",
+                };
+                if (propertyTypeModel[propertyType]) {
+                    return {
+                        "isSimple": true,
+                        "type": propertyTypeModel[propertyType]
+                    };
+                } else if (propertyType === 'boolean') {
+                    return {
+                        "isSimple": false,
+                        "type": "boolean"
+                    };
+                } else if (propertyType === 'choicelist') {
+                    return {
+                        "isSimple": false,
+                        "type": "choice"
+                    };
+                } else if (propertyType === 'gliderecord') {
+                    return {
+                        "isSimple": false,
+                        "type": "gliderecord"
+                    };
+                }
+            }
+
+            function getTemplate(inputType) {
+                if (inputType === 'input') {
+                    return '<input ng-change="propertyChanged(propertyName)"  ng-class="ngClass" ng-disabled="inputDisabled" type="{{inputProperties.type}}" placeholder="{{placeholder}}" ng-model="propertyValue">';
+                } else if (inputType === 'select') {
+                    return '<select ng-disabled="inputDisabled" ng-class="ngClass" ng-change="propertyChanged(propertyName)" ng-model="propertyValue" ng-options="o.v as o.n for o in inputProperties.choiceArray"></select>';
+                } else if (inputType === 'gliderecord') {
+                    return '<sn-record-picker ng-disabled="inputDisabled"  ng-class="ngClass" placeholder="{{placeholder}}" field="propertyValue" table="grTable" display-field="grDisplayField" value-field="grValueField" search-fields="grSearchFields" page-size="100"></sn-record-picker>';
+                }
+            }
+            getPropertyDetails(scope.propertyName);
+			
+        },
+    };
+}
+
+]]></script>
+        <sys_class_name>sp_angular_provider</sys_class_name>
+        <sys_created_by>erik.anderson</sys_created_by>
+        <sys_created_on>2020-12-21 04:19:06</sys_created_on>
+        <sys_id>41b8a4542f9da010a8ce2b5df699b650</sys_id>
+        <sys_name>itsSystemProperty</sys_name>
+        <sys_package display_value="System Property Directive Portal" source="x_156954_sysprop_d">d388a0d02f9da010a8ce2b5df699b673</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="System Property Directive Portal">d388a0d02f9da010a8ce2b5df699b673</sys_scope>
+        <sys_update_name>sp_angular_provider_41b8a4542f9da010a8ce2b5df699b650</sys_update_name>
+        <type>directive</type>
+    </sp_angular_provider>
+</record_update>

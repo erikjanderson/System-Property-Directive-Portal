@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sp_page">
+    <sp_page action="INSERT_OR_UPDATE">
+        <category>custom</category>
+        <css/>
+        <draft>false</draft>
+        <dynamic_title_structure/>
+        <id>x_156954_sysprop_d_system_properties</id>
+        <internal>false</internal>
+        <omit_watcher>false</omit_watcher>
+        <public>false</public>
+        <roles/>
+        <seo_script/>
+        <short_description/>
+        <sys_class_name>sp_page</sys_class_name>
+        <sys_created_by>erik.anderson</sys_created_by>
+        <sys_created_on>2020-12-21 04:22:42</sys_created_on>
+        <sys_id>e15a2c942f9da010a8ce2b5df699b692</sys_id>
+        <sys_name>x_156954_sysprop_d_system_properties</sys_name>
+        <sys_package display_value="System Property Directive Portal" source="x_156954_sysprop_d">d388a0d02f9da010a8ce2b5df699b673</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="System Property Directive Portal">d388a0d02f9da010a8ce2b5df699b673</sys_scope>
+        <sys_update_name>sp_page_e15a2c942f9da010a8ce2b5df699b692</sys_update_name>
+        <title>System Property Portal</title>
+        <use_seo_script>false</use_seo_script>
+    </sp_page>
+    <sys_translated_text action="delete_multiple" query="documentkey=e15a2c942f9da010a8ce2b5df699b692"/>
+</record_update>

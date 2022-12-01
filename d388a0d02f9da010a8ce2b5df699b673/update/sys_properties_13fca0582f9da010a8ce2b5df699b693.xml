@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_properties">
+    <sys_properties action="INSERT_OR_UPDATE">
+        <choices/>
+        <description>Date Format property converts the input type into date</description>
+        <ignore_cache>true</ignore_cache>
+        <is_private>false</is_private>
+        <name>x_156954_sysprop_d.exDateProp</name>
+        <read_roles/>
+        <suffix>exDateProp</suffix>
+        <sys_class_name>sys_properties</sys_class_name>
+        <sys_created_by>erik.anderson</sys_created_by>
+        <sys_created_on>2020-12-21 04:34:17</sys_created_on>
+        <sys_id>13fca0582f9da010a8ce2b5df699b693</sys_id>
+        <sys_name>x_156954_sysprop_d.exDateProp</sys_name>
+        <sys_package display_value="System Property Directive Portal" source="x_156954_sysprop_d">d388a0d02f9da010a8ce2b5df699b673</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="System Property Directive Portal">d388a0d02f9da010a8ce2b5df699b673</sys_scope>
+        <sys_update_name>sys_properties_13fca0582f9da010a8ce2b5df699b693</sys_update_name>
+        <type>date_format</type>
+        <value>2020-12-30T05:00:00.000Z</value>
+        <write_roles/>
+    </sys_properties>
+    <sys_translated_text action="delete_multiple" query="documentkey=13fca0582f9da010a8ce2b5df699b693"/>
+</record_update>

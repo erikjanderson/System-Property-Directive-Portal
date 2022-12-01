@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sp_widget">
+    <sp_widget action="INSERT_OR_UPDATE">
+        <category>custom</category>
+        <client_script><![CDATA[api.controller=function($scope, $timeout) {
+  /* widget controller */
+  var c = this;
+	c.saveProperties = saveProperties;
+	c.misMatchedScope = c.data.misMatchedScope;
+	//Array of property objects with name values already populated.
+	c.propArray = [
+		{
+			name: 'x_156954_sysprop_d.exStringProp'
+		},
+		{
+			name: 'x_156954_sysprop_d.exIntProp'
+		},
+		{
+			name: 'x_156954_sysprop_d.exDateProp'
+		},
+		{
+			name: 'x_156954_sysprop_d.exBoolProp'
+		},
+		{
+			name: 'x_156954_sysprop_d.exChoiceProp'
+		}
+	];
+	
+	//Server side call to save all properties in the propArray
+	function saveProperties(){
+		c.saving = true;
+		var input = {
+			action: 'save',
+			properties: c.propArray
+		};
+		c.server.get(input).then(function(response){
+			if(response && response.data){
+				c.saving = false;
+				c.saved = true;
+				for(var i = 0; i < c.propArray.length; i++){
+					var property = c.propArray[i];
+					if(property.isDirty){
+						//angular.element(document.getElementById(property.name)).removeClass('ng-dirty');
+						property.saved = true;
+						property.isDirty = false;
+					}
+				}
+				 $timeout(function(){c.saved = false}, 3000);       
+			}
+		});
+	}
+	
+
+$scope.$watch("c.propArray", function (newValue, oldValue) {
+    for(var i = 0; i < newValue.length; i++){
+			var newProperty = newValue[i];
+			var oldProperty = oldValue[i];
+			if(oldProperty.value || newProperty.value && typeof oldProperty.value == 'object' || typeof oldProperty.value =='object'){
+				if(JSON.stringify(oldProperty.value) != JSON.stringify(newProperty.value)){
+					newProperty.isDirty = true;
+				}
+			}else if(newProperty.value != oldProperty.value && oldProperty.loaded){
+					newProperty.isDirty = true;
+			}
+		}
+	}, true);
+	//c.dateProp = new Date();
+	//c.rekt = {"value":"25ab96060a0a0bb300a6d66ce72095f2","displayValue":"1007 Green Street Southeast, Conyers,GA"};
+};]]></client_script>
+        <controller_as>c</controller_as>
+        <css>.customInput {
+	  border-bottom-style: solid;
+    border-width: 0px 0px 4px 0px;
+    
+    box-shadow: none;
+    background-color: #ffffff;
+    outline: none;
+    font-size: 17px;
+    height: 50px;
+  	box-shadow:  1px 1px 3px 0px black;
+  	color: #2b2b2b;
+ 		 padding-left: 27px;
+}
+
+.customInput:disabled{
+	background-color: #c7c7c7;
+}
+
+.customInput.isSaved{
+	border-color: #428bca;
+}
+
+.customInput.notSaved{
+	border-color: #ea9800;
+}
+
+.statusIcon {
+    position: absolute;
+    padding: 16px 6px;
+    font-size: 17px;
+}
+
+
+.form-group label {
+	font-size: 17px;
+}
+
+.container {
+  	width: 73%;
+    background-color: #efefef;;
+    border-radius: 12px;
+    margin-bottom: 32px;
+    padding: 2% 6% 3% 6%;
+  	color: #2b2b2b;
+}
+
+.alert-info {
+    color: #2d608c;
+    border-color: #2d608c;
+}
+
+h1 {
+  	text-align: center;
+    border-bottom-style: solid;
+    border-color: #2d608c;
+    margin: 22px 13%;
+    padding-bottom: 6px;
+    font-weight: 500;
+}
+
+.saveButton {
+    width: 100%;
+    margin-top: 19px;
+    background-color: #4b90cc;
+    color: white;
+    padding-top: 16px;
+    height: 65px;
+    font-size: 19px;
+    border-color: #2d608c;
+    border-width: 0px 0px 6px 0px;
+}
+
+.saveButton:hover {
+	background-color: #2f7fc3;;
+
+}
+
+.saveButton:active{
+	background-color: #2568a2;
+}</css>
+        <data_table>sp_instance</data_table>
+        <demo_data/>
+        <description/>
+        <docs/>
+        <field_list/>
+        <has_preview>false</has_preview>
+        <id>x_156954_sysprop_d_system_properties</id>
+        <internal>false</internal>
+        <link><![CDATA[function link(scope, element, attrs, controller) {  }]]></link>
+        <name>Application System Properties</name>
+        <option_schema/>
+        <public>false</public>
+        <roles/>
+        <script><![CDATA[(function() {
+  /* populate the 'data' object */
+  /* e.g., data.table = $sp.getValue('table'); */
+	var session = gs.getSession();
+	data.misMatchedScope = checkCorrectScope(session);
+	//correctScope = gs.getCurrentApplicationId() == 'd388a0d02f9da010a8ce2b5df699b673';
+	if(input && input.action){
+		if(input.action === 'save' && input.properties && input.properties.length){
+			var properties = input.properties;
+			//Loop through all system properties and use gs.setProperty() to update
+			for(var i = 0; i < properties.length; i++){
+				gs.setProperty(properties[i].name, properties[i].value);
+			}
+		}
+	}
+	
+	function checkCorrectScope(session){
+		var thisAppScope = gs.getCurrentScopeName();
+		var scopeId = session.getCurrentApplicationId();
+		gs.info(scopeId);
+		var gr = new GlideRecord('sys_scope');
+		if(gr.get(scopeId)){
+			var selectedScope = gr.getValue('scope');
+			if(thisAppScope  === selectedScope){
+				return false;
+			}else{
+				return gr.getValue('name');
+			}
+		}
+		
+	}
+	
+})();]]></script>
+        <servicenow>false</servicenow>
+        <sys_class_name>sp_widget</sys_class_name>
+        <sys_created_by>erik.anderson</sys_created_by>
+        <sys_created_on>2020-12-21 04:21:21</sys_created_on>
+        <sys_id>b50a28d02f9da010a8ce2b5df699b66c</sys_id>
+        <sys_name>Application System Properties</sys_name>
+        <sys_package display_value="System Property Directive Portal" source="x_156954_sysprop_d">d388a0d02f9da010a8ce2b5df699b673</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="System Property Directive Portal">d388a0d02f9da010a8ce2b5df699b673</sys_scope>
+        <sys_update_name>sp_widget_b50a28d02f9da010a8ce2b5df699b66c</sys_update_name>
+        <template><![CDATA[<div>
+    <div class="container">
+      <div class="alert alert-info" ng-if="c.misMatchedScope" role="alert">
+        <span>These system properties are part of <strong>System Property Directive Portal</strong> but your current application is <strong>{{c.misMatchedScope}}</strong>. Switch application scopes before making changes.</span>
+      </div>
+        <h1>
+            System Properties
+        </h1>
+      <!-- Loop through each property in the propArray -->
+        <div class="form-group" ng-repeat="property in c.propArray">
+          <!-- The property description is populated by the its-system-property directive when
+               making the server side call to get all the system property attributes-->
+            <!--<i ng-if="property.isDirty" style="color: #ea9800" class="fa fa-exclamation-triangle" aria-hidden="true"></i>-->
+          
+            <label>{{property.description}}</label>
+          <!-- Call the its-system-property directive the only required attribute is property-name but
+               property value and property description are helpfull since they will be populated once the property is loaded-->
+          <div>
+            <i ng-hide="property.isDirty" style="color: #428bca" class="statusIcon fa fa-check"></i>
+            <i ng-hide="!property.isDirty" style="color: #ea9800" class=" statusIcon fa fa-exclamation-triangle "></i>
+            <its-system-property  id="{{property.name}}"
+                                 ng-class="{'notSaved': property.isDirty, 'isSaved': !property.isDirty}"
+                                 class="customInput form-control" property-name="{{property.name}}"
+                                  value="property.value"description="property.description" input-disabled="c.misMatchedScope" loaded="property.loaded"></its-system-property>
+          </div>
+          
+        </div>
+      <!-- Save button to save all the system properties on the server side -->
+        <btn class="btn saveButton" ng-click="c.saveProperties()" ng-disabled="c.misMatchedScope">
+          <span ng-if="!c.saving && !c.saved">Save</span> 
+          <span ng-if="c.saving"><i class="fa fa-spinner fa-spin"></i> Saving</span>
+          <span ng-if="!c.saving && c.saved"><i class="fa fa-check-circle-o"></i> Saved</span>
+      
+      </btn>
+    </div>
+</div>]]></template>
+    </sp_widget>
+</record_update>

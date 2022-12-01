@@ -8,6 +8,7 @@
         <installed_as_dependency>false</installed_as_dependency>
         <js_level>helsinki_es5</js_level>
         <licensable>true</licensable>
+        <license/>
         <license_category>none</license_category>
         <license_definition/>
         <license_model>none</license_model>
@@ -28,9 +29,6 @@
         <sys_created_by>erik.anderson</sys_created_by>
         <sys_created_on>2020-12-21 04:14:54</sys_created_on>
         <sys_id>d388a0d02f9da010a8ce2b5df699b673</sys_id>
-        <sys_mod_count>0</sys_mod_count>
-        <sys_updated_by>erik.anderson</sys_updated_by>
-        <sys_updated_on>2020-12-21 04:14:54</sys_updated_on>
         <template/>
         <trackable>true</trackable>
         <uninstall_blocked>false</uninstall_blocked>
@@ -39,4 +37,5 @@
         <vendor_prefix/>
         <version>1.0.0</version>
     </sys_app>
+    <sys_translated_text action="delete_multiple" query="documentkey=d388a0d02f9da010a8ce2b5df699b673"/>
 </record_update>

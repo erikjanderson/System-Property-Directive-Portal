@@ -198,14 +198,11 @@ h1 {
         <sys_created_by>erik.anderson</sys_created_by>
         <sys_created_on>2020-12-21 04:21:21</sys_created_on>
         <sys_id>b50a28d02f9da010a8ce2b5df699b66c</sys_id>
-        <sys_mod_count>196</sys_mod_count>
         <sys_name>Application System Properties</sys_name>
         <sys_package display_value="System Property Directive Portal" source="x_156954_sysprop_d">d388a0d02f9da010a8ce2b5df699b673</sys_package>
         <sys_policy/>
         <sys_scope display_value="System Property Directive Portal">d388a0d02f9da010a8ce2b5df699b673</sys_scope>
         <sys_update_name>sp_widget_b50a28d02f9da010a8ce2b5df699b66c</sys_update_name>
-        <sys_updated_by>erik.anderson</sys_updated_by>
-        <sys_updated_on>2020-12-30 16:25:19</sys_updated_on>
         <template><![CDATA[<div>
     <div class="container">
       <div class="alert alert-info" ng-if="c.misMatchedScope" role="alert">

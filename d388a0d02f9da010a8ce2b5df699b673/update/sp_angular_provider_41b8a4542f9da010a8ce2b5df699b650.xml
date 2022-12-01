@@ -193,14 +193,11 @@
         <sys_created_by>erik.anderson</sys_created_by>
         <sys_created_on>2020-12-21 04:19:06</sys_created_on>
         <sys_id>41b8a4542f9da010a8ce2b5df699b650</sys_id>
-        <sys_mod_count>51</sys_mod_count>
         <sys_name>itsSystemProperty</sys_name>
         <sys_package display_value="System Property Directive Portal" source="x_156954_sysprop_d">d388a0d02f9da010a8ce2b5df699b673</sys_package>
         <sys_policy/>
         <sys_scope display_value="System Property Directive Portal">d388a0d02f9da010a8ce2b5df699b673</sys_scope>
         <sys_update_name>sp_angular_provider_41b8a4542f9da010a8ce2b5df699b650</sys_update_name>
-        <sys_updated_by>erik.anderson</sys_updated_by>
-        <sys_updated_on>2020-12-28 01:38:40</sys_updated_on>
         <type>directive</type>
     </sp_angular_provider>
 </record_update>
